@@ -5,25 +5,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>2026년 진행도</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Pretendard:wght@100..900&family=Inter:wght@300;400;600;700;800&display=swap"
+        rel="stylesheet">
     <style>
         :root {
             /* 기본 색상 테마 */
             --bg-color: #FFF5E4;
-            --text-main: #5C4B49;
-            --accent-start: #000000;
-            --accent-end: #000000;
+            --text-main: #333333;
+            --accent-color: #000000;
 
-            /* --- 좌표 및 크기 컨트롤 영역 (여기서 위치와 크기를 조절하세요) --- */
-            /* Y좌표: 화면 상단으로부터의 위치 (vh 단위 혹은 px) */
-            --title-y: 15vh;
-            --percentage-y: 11vh;
-            --progress-y: 30vh;
-            --footer-y: 92vh;
+            /* --- 상대적 위치 및 스타일 조절 --- */
+            /* 0이 화면 정중앙입니다. 음수는 위로, 양수는 아래로 이동합니다. */
+            --days-y-offset: -390px;
+            --percentage-x-offset: 180px;
+            --percentage-y-offset: -300px;
+            --footer-y-offset: 600px;
 
-            /* 크기 조절 */
-            --percentage-font-size: 2.2rem;
-            --footer-font-size: 1.5rem;
+
+            /* 글자 크기 */
+            --days-font-size: clamp(3.5rem, 5vw, 2.2rem);
+            --percentage-font-size: clamp(1rem, 4vw, 1.4rem);
+            --footer-font-size: clamp(1rem, 4vw, 1.4rem);
+
+            /* 글자 굵기 */
+            --days-font-weight: 500;
+            --percentage-font-weight: 500;
+            --footer-font-weight: 500;
         }
 
         * {
@@ -33,95 +41,105 @@
         }
 
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Pretendard', 'Inter', sans-serif;
             background-color: var(--bg-color);
             background-image: url('bg.jpg');
             background-size: auto;
-            background-repeat: no-repeat;
             background-position: center;
+            background-repeat: no-repeat;
             color: var(--text-main);
             min-height: 100vh;
+            width: 100%;
             overflow: hidden;
             display: flex;
             justify-content: center;
+            align-items: center;
+        }
+
+        /* 배경 레이어 (선택 사항: 가독성을 위해 배경에 살짝 틴트) */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            z-index: -1;
         }
 
         .container {
             position: relative;
             width: 100%;
-            max-width: 800px;
             height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             text-align: center;
             opacity: 0;
-            animation: fadeIn 1s ease-out forwards;
+            animation: fadeIn 1.2s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+            padding: 20px;
         }
 
         @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
             to {
                 opacity: 1;
+                transform: translateY(0);
             }
         }
 
-        /* 각 요소들 배치 */
-        h1 {
+        /* 각 요소 공통 스타일 */
+        .moving-part {
             position: absolute;
-            top: var(--title-y);
             left: 50%;
-            transform: translateX(-50%);
-            font-size: 3.0rem;
-            font-weight: 800;
-            line-height: 1.3;
-            letter-spacing: -0.05em;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.9);
-            width: 100%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            max-width: 800px;
         }
 
         .days {
-            margin-top: 0.5rem;
-            color: var(--accent-end);
+            transform: translate(-50%, calc(-50% + var(--days-y-offset)));
+            font-size: var(--days-font-size);
+            font-weight: var(--days-font-weight);
+            letter-spacing: -0.02em;
         }
 
-        .days span {
-            background: white;
-            padding: 2px 10px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-        }
 
         .percentage {
-            position: absolute;
-            top: var(--percentage-y);
-            left: 50%;
-            transform: translateX(-50%);
+            transform: translate(calc(-50% + var(--percentage-x-offset)), calc(-50% + var(--percentage-y-offset)));
             font-size: var(--percentage-font-size);
-            font-weight: 700;
-            background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-variant-numeric: tabular-nums;
-            text-shadow: 2px 2px 10px rgba(255, 255, 255, 0.8);
+            font-weight: var(--percentage-font-weight);
+            color: var(--accent-color);
+            letter-spacing: -0.04em;
+            line-height: 1;
+            text-shadow: 0 4px 15px rgba(255, 255, 255, 0.5);
+        }
+
+        .percentage span {
+            display: inline-block;
         }
 
         .footer {
-            position: absolute;
-            top: var(--footer-y);
-            left: 50%;
-            transform: translateX(-50%);
+            transform: translate(-50%, calc(-50% + var(--footer-y-offset)));
             font-size: var(--footer-font-size);
-            font-weight: 600;
-            color: var(--text-main);
-            background: rgba(255, 255, 255, 0.5);
-            padding: 8px 15px;
-            border-radius: 12px;
-            backdrop-filter: blur(4px);
-            white-space: nowrap;
-            max-width: 80%;
+            font-weight: var(--footer-font-weight);
+            max-width: 70%;
+            line-height: 1.5;
         }
 
+        /* 모바일 최적화 미세 조정 */
         @media (max-width: 480px) {
             :root {
-                --percentage-font-size: 10rem;
-                --progress-width: 80%;
+                --days-y-offset: -120px;
+                --percentage-y-offset: -20px;
+                --footer-y-offset: 140px;
             }
         }
     </style>
@@ -130,13 +148,16 @@
 <body>
 
     <div class="container">
-        <h1>
-            <div class="days"><span><span id="days">0</span>일</span></div>
-            <div class="percentage"><span><span id="percentage">0.0%</span>나 지났다...</span></div>
-        </h1>
+        <div class="days moving-part">
+            <span><span id="days">0</span>일 차</span>
+        </div>
 
-        <div id="motivation-text" class="footer">
+        <div class="percentage moving-part">
+            <span>올해도 <span id="percentage">0.0%</span>가 지났다...</span>
+        </div>
 
+        <div id="motivation-text" class="footer moving-part">
+            <!-- 동적으로 삽입됨 -->
         </div>
     </div>
 
@@ -151,27 +172,28 @@
             "전국 각지의 빵을 공짜로 맛보게 해주는 팀은 없습니다",
             "단 거 먹어",
             "당신의 일급은 10만원이 넘습니다.",
-            "왕 데이트를 더 즐겁게 하는 방법: 워킹데이를 야무지게 보내기",
+            "데이트를 더 즐겁게 하는 법: 워킹데이를 바쁘게 보내기",
             "밖은 추워",
             "이 순간만 잘 참으면 또 오래 다닐수 있다 하던데",
             "내가 언제 대기업 또 다녀보겠냐",
             "복지포인트, 명절선물, 보험, forest, 건강검진 레츠고",
             "어차피 오늘 사표내도 당장 못 그만둠",
-            "당신은 막내입니다. 이것도 부둥부둥해주는 것일지 모릅니다.",
+            "이것도 부둥부둥해주는 것일지 모릅니다.",
             "뇌빼고 MZ행동을해도 괜찮은 곳이 흔할까?",
             "지금 좀 벌어두면 은퇴 앞당길 수 있음",
             "바클보단 낫잖아 한잔해",
             "ㄱㅊ 낼모레되면 빡쳤던거 까먹음",
             "근데 그만두면 다시 일하고 싶을듯",
-            "일단 많이 벌 수 있을때 좀 버티장 진짜 에바인거같을때 나와도 늦지않음",
+            "일단 많이 벌 수 있을때 좀 버티장",
+            "진짜 에바인거같을때 나와도 늦지않음",
             "이번주 주말은 진짜 완전 보람차고 즐거울듯",
             "빵 먹엉",
             "빠퇴해",
-            "네임밸류에 비해 짜치는 건 사실이지만, 우리나라에선 선녀급이지",
+            "네임밸류에 비해 짜치는 건 사실이지만 전체로 보면 선녀급이지",
             "그치만 다른 회사에 이런사람들이 없을거라는 보장이 없음",
             "힘 좀 빼도 돼",
             "다 부수는 노래 들으면서 산책 가자",
-            "남아있으면 깜짝 이벤트로 김재혁이 밥 먹으러 방문함",
+            "남아있으면 깜짝 이벤트로 김재혁이 밥 먹으러 방문함!",
             "다른 회사 어떤지 봤잖아...",
             "일어나...재혁이랑 {selected_content} 해야지..."
         ];
@@ -200,42 +222,6 @@
             return sentence;
         }
 
-        // 초기 메시지 설정
-        document.getElementById('motivation-text').innerText = getRandomMotivation();
-
-        function updateProgress() {
-            const year = 2026;
-            const now = new Date();
-
-            const startOfYear = new Date(year, 0, 1);
-            const endOfYear = new Date(year + 1, 0, 1);
-
-            const totalMs = endOfYear.getTime() - startOfYear.getTime();
-            let passedMs = now.getTime() - startOfYear.getTime();
-
-            if (passedMs < 0) passedMs = 0;
-            if (passedMs > totalMs) passedMs = totalMs;
-
-            const passedDays = Math.floor(passedMs / (1000 * 60 * 60 * 24));
-            const percentage = (passedMs / totalMs) * 100;
-
-            const daysEl = document.getElementById('days');
-            const percEl = document.getElementById('percentage');
-
-            daysEl.innerText = passedDays;
-
-            const targetStr = percentage.toFixed(1) + '%';
-
-            if (percEl.getAttribute('data-init') !== 'true') {
-                percEl.setAttribute('data-init', 'true');
-                animateValue(percEl, 0, percentage, 1500);
-            } else if (!percEl.hasAttribute('data-animating')) {
-                percEl.innerText = targetStr;
-            }
-
-            barEl.style.width = percentage + '%';
-        }
-
         function animateValue(obj, start, end, duration) {
             let startTimestamp = null;
             obj.setAttribute('data-animating', 'true');
@@ -258,6 +244,44 @@
             window.requestAnimationFrame(step);
         }
 
+        function updateProgress() {
+            const year = 2026;
+            const now = new Date();
+
+            const startOfYear = new Date(year, 0, 1);
+            const endOfYear = new Date(year + 1, 0, 1);
+
+            const totalMs = endOfYear.getTime() - startOfYear.getTime();
+            let passedMs = now.getTime() - startOfYear.getTime();
+
+            if (passedMs < 0) passedMs = 0;
+            if (passedMs > totalMs) passedMs = totalMs;
+
+            const passedDays = Math.floor(passedMs / (1000 * 60 * 60 * 24)) + 1; // 1일차부터 시작하도록
+            const percentage = (passedMs / totalMs) * 100;
+
+            const daysEl = document.getElementById('days');
+            const percEl = document.getElementById('percentage');
+
+            if (daysEl) daysEl.innerText = passedDays;
+
+            if (percEl) {
+                if (percEl.getAttribute('data-init') !== 'true') {
+                    percEl.setAttribute('data-init', 'true');
+                    animateValue(percEl, 0, percentage, 1500);
+                } else if (!percEl.hasAttribute('data-animating')) {
+                    percEl.innerText = percentage.toFixed(1) + '%';
+                }
+            }
+        }
+
+        // 초기 메시지 설정
+        const motivationEl = document.getElementById('motivation-text');
+        if (motivationEl) {
+            motivationEl.innerText = getRandomMotivation();
+        }
+
+        // 실행
         updateProgress();
         setInterval(updateProgress, 1000);
     </script>
